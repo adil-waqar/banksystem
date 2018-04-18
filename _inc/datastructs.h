@@ -1,52 +1,51 @@
-class tree{
+class avl{
   private:
-    tree* left;
-    tree* right;
+    avl* left;
+    avl* right;
     int data;
 
   public:
-    tree* insertAvl(int, tree*);
-    tree* insertBst(int, tree*);
-    void search(int, tree*);
-    void display(tree*);
-    tree* min(tree*);
-    void max(tree*);
-    int height(tree*);
-    tree* remove(tree*, int);
-    tree* right_rot(tree*);
-    tree* left_rot(tree*);
-    tree* lr_rot(tree*);
-    tree* rl_rot(tree*);
+    avl* insert(int, avl*);
+    void search(int, avl*);
+    void display(avl*);
+    avl* min(avl*);
+    void max(avl*);
+    int height(avl*);
+    avl* remove(avl*, int);
+    avl* right_rot(avl*);
+    avl* left_rot(avl*);
+    avl* lr_rot(avl*);
+    avl* rl_rot(avl*);
 
 };
 
 
-tree* tree::right_rot(tree* t){
-  tree* u = t -> left;
+avl* avl::right_rot(avl* t){
+  avl* u = t -> left;
   t -> left = u -> right;
   u ->right = t;
   return u;
 
 }
 
-tree* tree::left_rot(tree* t){
-  tree* u = t -> right;
+avl* avl::left_rot(avl* t){
+  avl* u = t -> right;
   t -> right = u -> left;
   u -> left = t;
   return u;
 }
 
-tree* tree::rl_rot(tree* t){
+avl* avl::rl_rot(avl* t){
   t -> right = right_rot(t -> right);
   return left_rot(t);
 }
 
-tree* tree::lr_rot(tree* t){
+avl* avl::lr_rot(avl* t){
   t -> left = left_rot( t-> left);
   return right_rot(t);
 }
 
-tree* tree::remove(tree* root, int data){
+avl* avl::remove(avl* root, int data){
   // base case
   if (root == NULL) {
     cout << "DATA NOT FOUND." <<endl;
@@ -65,16 +64,16 @@ tree* tree::remove(tree* root, int data){
 
     // Case 2: One child
     else if(root -> left == NULL){
-      tree* temp = root;
+      avl* temp = root;
       root = root -> right;
       delete temp;
 
     } else if(root -> right == NULL){
-      tree* temp = root;
+      avl* temp = root;
       root = root -> left;
       delete temp;
     } else { // Case 3: Two children
-      tree* temp = min(root -> right);
+      avl* temp = min(root -> right);
       root -> data = temp -> data;
       root -> right = remove(root -> right, temp -> data);
     }
@@ -83,22 +82,22 @@ tree* tree::remove(tree* root, int data){
   return root;
 }
 
-tree* tree::insertAvl(int data, tree* root){
+avl* avl::insert(int data, avl* root){
   if ( root == NULL) {
-    tree* temp = new tree();
+    avl* temp = new avl();
     temp -> data = data;
     temp -> left = NULL;
     temp -> right = NULL;
     return temp;
   } else if( data < root -> data){
-    root -> left = insertAvl(data, root-> left);
+    root -> left = insert(data, root-> left);
     if (height(root -> left) - height(root -> right) == 2) {
       if ( data < root -> left -> data) {
         root = right_rot(root);
       } else root =  lr_rot(root);
     }
   } else{
-    root -> right = insertAvl(data, root -> right);
+    root -> right = insert(data, root -> right);
     if (height(root -> right) - height(root -> left) == 2) {
       if (data > root -> right -> data ) {
         root = left_rot(root);
@@ -108,22 +107,9 @@ tree* tree::insertAvl(int data, tree* root){
   return root;
 }
 
-tree* tree::insertBst(int data, tree* root){
-  if ( root == NULL) {
-    tree* temp = new tree();
-    temp -> data = data;
-    temp -> left = NULL;
-    temp -> right = NULL;
-    return temp;
-  } else if( data < root -> data){
-    root -> left = insert(data, root-> left);
-  } else{
-    root -> right = insert(data, root -> right);
-  }
-}
 
 
-void tree::search(int data, tree* root){
+void avl::search(int data, avl* root){
   if (root  == NULL) {
     cout<< "DATA NOT FOUND! "<<endl;
     return;
@@ -139,21 +125,21 @@ void tree::search(int data, tree* root){
 
 }
 
-void tree::display(tree* root){
+void avl::display(avl* root){
   if ( root == NULL) return;
   display( root -> left);
-  cout << root -> data << "\t";
+  cout << root -> data << "\t"<<height(root) <<endl;
   display(root -> right);
 }
 
-tree* tree::min(tree* root){
+avl* avl::min(avl* root){
   while( root -> left != NULL){
     root = root -> left;
   }
   return root;
 }
 
-void tree::max(tree* root){
+void avl::max(avl* root){
   while( root -> right != NULL){
     root = root -> right;
   }
@@ -161,7 +147,7 @@ void tree::max(tree* root){
   cout<< "The max is: "<< root -> data;
 }
 
-int tree::height(tree* root ){
+int avl::height(avl* root ){
   // base case
   if (root == NULL) {
     return -1;
@@ -258,4 +244,124 @@ void List::deleteNode(int val)
         prev->next = curr->next;
     delete curr;
 
+}
+
+class bst{
+  private:
+    bst* left;
+    bst* right;
+    int data;
+
+  public:
+    bst* insert(int, bst*);
+    void search(int, bst*);
+    void display(bst*);
+    bst* min(bst*);
+    void max(bst*);
+    int height(bst*);
+    bst* remove(bst*, int);
+};
+
+bst* bst::remove(bst* root, int data){
+  // base case
+  if (root == NULL) {
+    cout << "DATA NOT FOUND." <<endl;
+    return root;
+  } else if (data > root -> data) {
+    root -> right = remove(root -> right, data);
+  } else if(data < root -> data){
+    root -> left = remove(root -> left, data);
+  } else{
+    // three cases
+    // Case 1: No child
+    if(root -> left == NULL && root -> right == NULL){
+      delete root;
+      root = NULL;
+    }
+
+    // Case 2: One child
+    else if(root -> left == NULL){
+      bst* temp = root;
+      root = root -> right;
+      delete temp;
+
+    } else if(root -> right == NULL){
+      bst* temp = root;
+      root = root -> left;
+      delete temp;
+    } else { // Case 3: Two children
+      bst* temp = min(root -> right);
+      root -> data = temp -> data;
+      root -> right = remove(root -> right, temp -> data);
+    }
+
+  }
+  return root;
+}
+
+bst* bst::insert(int data, bst* root){
+  if ( root == NULL) {
+    bst* temp = new bst();
+    temp -> data = data;
+    temp -> left = NULL;
+    temp -> right = NULL;
+    return temp;
+  } else if( data < root -> data){
+    root -> left = insert(data, root-> left);
+  } else{
+    root -> right = insert(data, root -> right);
+  }
+}
+
+void bst::search(int data, bst* root){
+  if (root  == NULL) {
+    cout<< "DATA NOT FOUND! "<<endl;
+    return;
+  } else if( root -> data == data){
+    cout<<" DATA FOUND"<<endl;
+    return;
+  }
+   else if( data > root -> data){
+    search(data, root -> right);
+  } else if (data < root -> data){
+    search(data, root -> left);
+  }
+
+}
+
+void bst::display(bst* root){
+  if ( root == NULL) return;
+  display( root -> left);
+  cout << root -> data << "\t";
+  display(root -> right);
+}
+
+bst* bst::min(bst* root){
+  while( root -> left != NULL){
+    root = root -> left;
+  }
+  return root;
+}
+
+void bst::max(bst* root){
+  while( root -> right != NULL){
+    root = root -> right;
+  }
+  cout<< endl;
+  cout<< "The max is: "<< root -> data;
+}
+
+int bst::height(bst* root ){
+  // base case
+  if (root == NULL) {
+    return -1;
+  }
+  else{
+  int ldepth = height(root -> left);
+  int rdepth = height(root -> right);
+
+  if (ldepth > rdepth) {
+    return (ldepth + 1);
+  } else return (rdepth + 1);
+}
 }

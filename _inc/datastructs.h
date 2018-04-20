@@ -46,40 +46,69 @@ avl* avl::lr_rot(avl* t){
 }
 
 avl* avl::remove(avl* root, int data){
-  // base case
-  if (root == NULL) {
-    cout << "DATA NOT FOUND." <<endl;
-    return root;
-  } else if (data > root -> data) {
-    root -> right = remove(root -> right, data);
-  } else if(data < root -> data){
-    root -> left = remove(root -> left, data);
-  } else{
-    // three cases
-    // Case 1: No child
-    if(root -> left == NULL && root -> right == NULL){
-      delete root;
-      root = NULL;
-    }
+        // base case
+        if (root == NULL) {
+                cout << "COURSE NOT FOUND." <<endl;
+                return root;
+        } else if (data > root->data) {
+                root->right = remove(root->right, data);
+        } else if(data < root->data) {
+                root->left = remove(root->left, data);
+        } else{
+                // three cases
+                // Case 1: No child
+                if(root->left == NULL && root->right == NULL) {
+                        delete root;
+                        root = NULL;
+                }
 
-    // Case 2: One child
-    else if(root -> left == NULL){
-      avl* temp = root;
-      root = root -> right;
-      delete temp;
+                // Case 2: One child
+                else if(root->left == NULL) {
+                        avl* temp = root;
+                        root = root->right;
+                        delete temp;
 
-    } else if(root -> right == NULL){
-      avl* temp = root;
-      root = root -> left;
-      delete temp;
-    } else { // Case 3: Two children
-      avl* temp = min(root -> right);
-      root -> data = temp -> data;
-      root -> right = remove(root -> right, temp -> data);
-    }
+                } else if(root->right == NULL) {
+                        avl* temp = root;
+                        root = root->left;
+                        delete temp;
+                } else { // Case 3: Two children
+                        avl* temp = min(root->right);
+                        root->data = temp->data;
+                        root->right = remove(root->right, temp->data);
+                }
 
-  }
-  return root;
+        }
+
+        if(root == NULL)
+            return root;
+
+        if(height(root->left) - height(root->right) == 2)
+        {
+                // right right case
+
+                if(height(root->left->left) - height(root->left->right) == 1)
+                        return left_rot(root);
+                // right left case
+                else
+                        return rl_rot(root);
+        }
+        // If right node is deleted, left case
+        else if(height(root->right) - height(root->left) == 2)
+        {
+
+                // left left case
+                cout << "sfd";
+                if(height(root->right->right) - height(root->right->left) == 1)
+                        return right_rot(root);
+                // left right case
+                else
+                        return lr_rot(root);
+        }
+
+        return root;
+
+
 }
 
 avl* avl::insert(int data, avl* root){

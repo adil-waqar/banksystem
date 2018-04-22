@@ -38,7 +38,15 @@ class user{
 };
 
 void user::transfer(int from, int to, float amount, user* root){
-  
+  user* from_u = search(from, root);
+  user* to_u = search(to, root);
+  if (from_u && to_u) {
+    if (from_u -> getAmount() >= amount) {
+      from_u -> setAmount(from_u -> getAmount() - amount);
+      to_u -> depositAmount(amount);
+    } else cout << "Amount is insufficient. " <<endl;
+
+  } else cout <<"Either user id is incorrent or user doesn't exist. " <<endl;
 }
 
 void user::withdraw(int id, float amount, user* root){

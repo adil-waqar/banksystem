@@ -62,11 +62,10 @@ void manager::test(user* root){
 int main(){
   manager boy(1, "123", 500);
   user* root = NULL;
-  root = boy.openAccount(1, "tom", "Adil", 40000, 00.0, "Sav", root);
-  root = boy.openAccount(2, "tom", "Adil", 56, 00.0, "Sav", root);
-  root = boy.openAccount(3, "tom", "Adil", 566.6, 00.0, "Sav", root);
+  root = boy.openAccount(1, "tom", "Adil", 500, 00.0, "Sav", root);
+  root = boy.openAccount(2, "tom", "Emily", 750, 00.0, "Sav", root);
   user boyz;
-  boyz.showBal(3, root);
-  boyz.withdraw(3, 566.7, root);
-  boyz.showBal(3, root);
+  boyz.transfer(2, 1, 750.0, root);
+  boyz.display(root);
+
 }

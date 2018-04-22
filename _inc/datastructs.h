@@ -15,7 +15,7 @@ class user{
 
   public:
     user* insert(int, string, string, float, float, string, user*);  // id, password, name, amount, interest, type
-    user* search(int, string, string, float, float, string, user*);
+    user* search(int, user*);
     void display(user*);
     user* min(user*);
     void max(user*);
@@ -25,9 +25,33 @@ class user{
     user* left_rot(user*);
     user* lr_rot(user*);
     user* rl_rot(user*);
+    float getAmount();
+    void setAmount(int);
+    void setInterest(float);
+    float getInterest();
+    void depositAmount(int);
 
 };
 
+void user::depositAmount(int amounts){
+  amount = amount + amounts;
+}
+
+float user::getInterest(){
+  return interest;
+}
+
+float user::getAmount(){
+  return amount;
+}
+
+void user::setAmount(int amounts){
+  amount =  amounts;
+}
+
+void user::setInterest(float interests){
+  interest = interests;
+}
 
 user* user::right_rot(user* t){
   user* u = t -> left;
@@ -124,6 +148,11 @@ user* user::insert(int data, string pass, string name, float amount, float inter
   if ( root == NULL) {
     user* temp = new user();
     temp -> data = data;
+    temp -> password = pass;
+    temp -> name = name;
+    temp -> amount = amount;
+    temp -> interest = interest;
+    temp -> type = type;
     temp -> left = NULL;
     temp -> right = NULL;
     return temp;
@@ -147,7 +176,7 @@ user* user::insert(int data, string pass, string name, float amount, float inter
 
 
 
-user* user::search(int data,string pass, string name, float amount, float interest, string type, user* root){
+user* user::search(int data, user* root){
   if (root  == NULL) {
     // cout<< "DATA NOT FOUND! "<<endl;
     return NULL;
@@ -156,9 +185,9 @@ user* user::search(int data,string pass, string name, float amount, float intere
     return root;
   }
    else if( data > root -> data){
-    search(data,  pass, name, amount, interest, type, root -> right);
+    search(data,  root -> right);
   } else if (data < root -> data){
-    search(data, pass, name, amount, interest, type, root -> left);
+    search(data, root -> left);
   }
 
 }
@@ -166,7 +195,7 @@ user* user::search(int data,string pass, string name, float amount, float intere
 void user::display(user* root){
   if ( root == NULL) return;
   display( root -> left);
-  cout << root -> data << "\t"<<height(root) <<endl;
+  cout << root -> amount << "\t"<<height(root) <<endl;
   display(root -> right);
 }
 

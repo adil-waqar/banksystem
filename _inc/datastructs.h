@@ -33,8 +33,13 @@ class user{
     void zakat(user*);
     void showBal(int, user*);
     void withdraw(int, float, user*);
+    void transfer(int, int, float, user*);
 
 };
+
+void user::transfer(int from, int to, float amount, user* root){
+  
+}
 
 void user::withdraw(int id, float amount, user* root){
   user* user_find = search(id, root);

@@ -2,54 +2,54 @@
 #include<string>
 using namespace std;
 
-class avl{
+class user{
   private:
-    avl* left;
-    avl* right;
+    user* left;
+    user* right;
     int data;
 
   public:
-    avl* insert(int, avl*);
-    void search(int, avl*);
-    void display(avl*);
-    avl* min(avl*);
-    void max(avl*);
-    int height(avl*);
-    avl* remove(avl*, int);
-    avl* right_rot(avl*);
-    avl* left_rot(avl*);
-    avl* lr_rot(avl*);
-    avl* rl_rot(avl*);
+    user* insert(int, user*);
+    user* search(int, user*);
+    void display(user*);
+    user* min(user*);
+    void max(user*);
+    int height(user*);
+    user* remove(user*, int);
+    user* right_rot(user*);
+    user* left_rot(user*);
+    user* lr_rot(user*);
+    user* rl_rot(user*);
 
 };
 
 
-avl* avl::right_rot(avl* t){
-  avl* u = t -> left;
+user* user::right_rot(user* t){
+  user* u = t -> left;
   t -> left = u -> right;
   u ->right = t;
   return u;
 
 }
 
-avl* avl::left_rot(avl* t){
-  avl* u = t -> right;
+user* user::left_rot(user* t){
+  user* u = t -> right;
   t -> right = u -> left;
   u -> left = t;
   return u;
 }
 
-avl* avl::rl_rot(avl* t){
+user* user::rl_rot(user* t){
   t -> right = right_rot(t -> right);
   return left_rot(t);
 }
 
-avl* avl::lr_rot(avl* t){
+user* user::lr_rot(user* t){
   t -> left = left_rot( t-> left);
   return right_rot(t);
 }
 
-avl* avl::remove(avl* root, int data){
+user* user::remove(user* root, int data){
         // base case
         if (root == NULL) {
                 cout << "COURSE NOT FOUND." <<endl;
@@ -68,16 +68,16 @@ avl* avl::remove(avl* root, int data){
 
                 // Case 2: One child
                 else if(root->left == NULL) {
-                        avl* temp = root;
+                        user* temp = root;
                         root = root->right;
                         delete temp;
 
                 } else if(root->right == NULL) {
-                        avl* temp = root;
+                        user* temp = root;
                         root = root->left;
                         delete temp;
                 } else { // Case 3: Two children
-                        avl* temp = min(root->right);
+                        user* temp = min(root->right);
                         root->data = temp->data;
                         root->right = remove(root->right, temp->data);
                 }
@@ -115,9 +115,9 @@ avl* avl::remove(avl* root, int data){
 
 }
 
-avl* avl::insert(int data, avl* root){
+user* user::insert(int data, user* root){
   if ( root == NULL) {
-    avl* temp = new avl();
+    user* temp = new user();
     temp -> data = data;
     temp -> left = NULL;
     temp -> right = NULL;
@@ -142,13 +142,13 @@ avl* avl::insert(int data, avl* root){
 
 
 
-void avl::search(int data, avl* root){
+user* user::search(int data, user* root){
   if (root  == NULL) {
-    cout<< "DATA NOT FOUND! "<<endl;
-    return;
+    // cout<< "DATA NOT FOUND! "<<endl;
+    return NULL;
   } else if( root -> data == data){
-    cout<<" DATA FOUND"<<endl;
-    return;
+    // cout<<" DATA FOUND"<<endl;
+    return root;
   }
    else if( data > root -> data){
     search(data, root -> right);
@@ -158,21 +158,21 @@ void avl::search(int data, avl* root){
 
 }
 
-void avl::display(avl* root){
+void user::display(user* root){
   if ( root == NULL) return;
   display( root -> left);
   cout << root -> data << "\t"<<height(root) <<endl;
   display(root -> right);
 }
 
-avl* avl::min(avl* root){
+user* user::min(user* root){
   while( root -> left != NULL){
     root = root -> left;
   }
   return root;
 }
 
-void avl::max(avl* root){
+void user::max(user* root){
   while( root -> right != NULL){
     root = root -> right;
   }
@@ -180,7 +180,7 @@ void avl::max(avl* root){
   cout<< "The max is: "<< root -> data;
 }
 
-int avl::height(avl* root ){
+int user::height(user* root ){
   // base case
   if (root == NULL) {
     return -1;

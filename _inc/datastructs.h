@@ -31,8 +31,24 @@ class user{
     float getInterest();
     void depositAmount(int);
     void zakat(user*);
+    void showBal(int, user*);
+    void withdraw(int, float, user*);
 
 };
+
+void user::withdraw(int id, float amount, user* root){
+  user* user_find = search(id, root);
+  if (amount <= user_find -> getAmount() && user_find) {
+    user_find -> setAmount(user_find -> getAmount() - amount);
+  } else cout << "Amount is greater than available balance or user id incorrect. " << endl;
+}
+
+void user::showBal(int id, user* root){
+  user* user_find = search(id, root);
+  if (user_find) cout << "Your current balance is: "<< user_find -> getAmount() << endl;
+  else cout << "User not found! "<<endl;
+
+}
 
 void user::zakat(user* root){
   if (root == NULL) {

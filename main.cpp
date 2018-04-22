@@ -65,6 +65,8 @@ int main(){
   root = boy.openAccount(1, "tom", "Adil", 40000, 00.0, "Sav", root);
   root = boy.openAccount(2, "tom", "Adil", 56, 00.0, "Sav", root);
   root = boy.openAccount(3, "tom", "Adil", 566.6, 00.0, "Sav", root);
-  boy.applyZakat(root);
-  boy.test(root);
+  user boyz;
+  boyz.showBal(3, root);
+  boyz.withdraw(3, 566.7, root);
+  boyz.showBal(3, root);
 }

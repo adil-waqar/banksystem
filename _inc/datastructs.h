@@ -6,7 +6,12 @@ class user{
   private:
     user* left;
     user* right;
-    int data;
+    int data; // This is the id
+    string password;
+    string name;
+    float amount;
+    float interest;
+    string type;
 
   public:
     user* insert(int, user*);

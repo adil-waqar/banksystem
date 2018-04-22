@@ -195,7 +195,7 @@ int user::height(user* root ){
 }
 }
 
-class List{
+class transactions{
     private:
        struct node{
            int val;
@@ -203,12 +203,12 @@ class List{
        };
          node *Head;
     public:
-        List();
+        transactions();
         void insert(int);
         void display();
         void search(int);
         void deleteNode(int);
-          ~List()
+          ~transactions()
           {
               node *temp;
               while(temp)
@@ -221,12 +221,12 @@ class List{
 };
 
 
-List::List()
+transactions::transactions()
 {
     this->Head = NULL;
 }
 
-void List::insert(int val)
+void transactions::insert(int val)
 {
     node *newPtr = new node(), *temp = this->Head;
     newPtr->val = val;
@@ -245,7 +245,7 @@ void List::insert(int val)
 
 }
 
-void List::display()
+void transactions::display()
 {
     node *temp = this->Head;
     while(temp)
@@ -256,7 +256,7 @@ void List::display()
     return;
 }
 
-void List::deleteNode(int val)
+void transactions::deleteNode(int val)
 {
     node *curr = this->Head, *prev = NULL;
     while(curr && curr->val != val)

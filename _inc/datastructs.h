@@ -14,8 +14,8 @@ class user{
     string type;
 
   public:
-    user* insert(int, user*);
-    user* search(int, user*);
+    user* insert(int, string, string, float, float, string, user*);  // id, password, name, amount, interest, type
+    user* search(int, string, string, float, float, string, user*);
     void display(user*);
     user* min(user*);
     void max(user*);
@@ -120,7 +120,7 @@ user* user::remove(user* root, int data){
 
 }
 
-user* user::insert(int data, user* root){
+user* user::insert(int data, string pass, string name, float amount, float interest, string type, user* root){  // id, password, name, amount, interest, type
   if ( root == NULL) {
     user* temp = new user();
     temp -> data = data;
@@ -128,14 +128,14 @@ user* user::insert(int data, user* root){
     temp -> right = NULL;
     return temp;
   } else if( data < root -> data){
-    root -> left = insert(data, root-> left);
+    root -> left = insert(data, pass, name, amount, interest, type, root-> left);
     if (height(root -> left) - height(root -> right) == 2) {
       if ( data < root -> left -> data) {
         root = right_rot(root);
       } else root =  lr_rot(root);
     }
   } else{
-    root -> right = insert(data, root -> right);
+    root -> right = insert(data, pass, name, amount, interest, type, root -> right);
     if (height(root -> right) - height(root -> left) == 2) {
       if (data > root -> right -> data ) {
         root = left_rot(root);
@@ -147,7 +147,7 @@ user* user::insert(int data, user* root){
 
 
 
-user* user::search(int data, user* root){
+user* user::search(int data,string pass, string name, float amount, float interest, string type, user* root){
   if (root  == NULL) {
     // cout<< "DATA NOT FOUND! "<<endl;
     return NULL;
@@ -156,9 +156,9 @@ user* user::search(int data, user* root){
     return root;
   }
    else if( data > root -> data){
-    search(data, root -> right);
+    search(data,  pass, name, amount, interest, type, root -> right);
   } else if (data < root -> data){
-    search(data, root -> left);
+    search(data, pass, name, amount, interest, type, root -> left);
   }
 
 }

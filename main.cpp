@@ -10,10 +10,21 @@ class manager{
   string password;
   float amount;
   user users;
-  private:
+  public:
   manager(int, string, float);
+  void openAccount();
+  void depositAmount();
+  void setInterest();
+  void applyInterest();
+  void applyZakat();
 
 };
+
+manager::manager(int id, string pass, float amount){
+  this ->  id = id;
+  this -> password = pass;
+  this -> amount = amount;
+}
 
 int main(){
 

@@ -323,7 +323,7 @@ user* user::search(int data, user* root){
 void user::display(user* root){
   if ( root == NULL) return;
   display( root -> left);
-  cout << root -> amount << "\t"<<height(root) <<endl;
+  cout << root -> password << "\t"<<height(root) <<endl;
   display(root -> right);
 }
 

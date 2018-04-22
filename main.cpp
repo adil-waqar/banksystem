@@ -1,5 +1,6 @@
 #include<iostream>
 #include<iomanip>
+#include<fstream>
 #include<string>
 using namespace std;
 int transId = 1;
@@ -88,16 +89,29 @@ void user::transfer(int from, int to, float amount, user* root){
 
 
 int main(){
+  ifstream inFile;
+  inFile.open("data/users.txt");
   manager boy(0, "123", 500);
-  user* root = NULL;
-  root = boy.openAccount(2, "tom", "Adil", 500, 00.0, "Sav", root);
-  root = boy.openAccount(3, "tom", "Emily", 750, 00.0, "Sav", root);
-  boy.depositAmount(3, 60, root);
   user girl;
-  girl.withdraw(3, 80, root);
-  girl.transfer(3, 2, 50, root);
-  cout << "User 3 transactions: " <<endl;
-  girl.printTrans(3, root);
-  cout << "User 2 transactions: " <<endl;
-  girl.printTrans(2, root);
+  user* root = NULL;
+  // root = boy.openAccount(2, "allowaccess", "Adil", 500, 00.0, "Sav", root);
+  // root = boy.openAccount(3, "accessgranted", "Emily", 750, 00.0, "Sav", root);
+  int id;
+  string password;
+  string name;
+  float amount;
+  float interest;
+  string type;
+  while (inFile >> id >> password >> name >> amount >> interest >> type ) {
+    root = boy.openAccount(id, password, name, amount, interest, type, root);
+  }
+
+  girl.display(root);
+  // boy.depositAmount(3, 60, root);
+  // girl.withdraw(3, 80, root);
+  // girl.transfer(3, 2, 50, root);
+  // cout << "User 3 transactions: " <<endl;
+  // girl.printTrans(3, root);
+  // cout << "User 2 transactions: " <<endl;
+  // girl.printTrans(2, root);
 }

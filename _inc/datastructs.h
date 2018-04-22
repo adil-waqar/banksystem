@@ -30,8 +30,20 @@ class user{
     void setInterest(float);
     float getInterest();
     void depositAmount(int);
+    void zakat(user*);
 
 };
+
+void user::zakat(user* root){
+  if (root == NULL) {
+    return;
+  }
+  zakat(root -> left);
+  if (root -> amount >= 40000) {
+    root -> amount = root -> amount - 0.025 * root -> amount;
+  }
+  zakat(root -> right);
+}
 
 void user::depositAmount(int amounts){
   amount = amount + amounts;

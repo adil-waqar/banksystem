@@ -48,12 +48,11 @@ void manager::setInterest(int id, float interest, user* root){
 void manager::applyInterest(int id, user* root){
   user* user_find = users.search(id, root);
   float newAmount = user_find -> getAmount() * ((user_find -> getInterest())/100) + user_find -> getAmount();
-  //cout << newAmount;
    user_find -> setAmount(newAmount);
 }
 
 void manager::applyZakat(user* root){
-  
+  users.zakat(root);
 }
 
 void manager::test(user* root){
@@ -63,10 +62,9 @@ void manager::test(user* root){
 int main(){
   manager boy(1, "123", 500);
   user* root = NULL;
-  root = boy.openAccount(1, "tom", "Adil", 100.0, 00.0, "Sav", root);
-  root = boy.openAccount(2, "tom", "Adil", 129.0, 00.0, "Sav", root);
+  root = boy.openAccount(1, "tom", "Adil", 40000, 00.0, "Sav", root);
+  root = boy.openAccount(2, "tom", "Adil", 56, 00.0, "Sav", root);
   root = boy.openAccount(3, "tom", "Adil", 566.6, 00.0, "Sav", root);
-  boy.setInterest(1, 12.00, root);
-  boy.applyInterest(1, root);
-   boy.test(root);
+  boy.applyZakat(root);
+  boy.test(root);
 }

@@ -2,10 +2,102 @@
 #include<string>
 using namespace std;
 
+class transactions{
+    private:
+       struct node{
+           int id;
+           int from;
+           int to;
+           float amount;
+           node *next;
+       };
+         node *Head;
+    public:
+        transactions();
+        void insert(int, int, int, float);
+        void display();
+        void search(int);
+        void deleteNode(int);
+          ~transactions()
+          {
+              node *temp;
+              while(temp)
+              {
+                  temp = this -> Head;
+                  this -> Head = this -> Head ->next;
+                  delete temp;
+              }
+          }
+};
+
+
+transactions::transactions()
+{
+    this -> Head = NULL;
+}
+
+void transactions::insert(int id, int from, int to, float amount)
+{
+    node *newPtr = new node(), *temp = this -> Head;
+    newPtr -> id = id;
+    newPtr -> from = from;
+    newPtr -> to = to;
+    newPtr -> amount = amount;
+    newPtr -> next = NULL;
+    if(!this -> Head)
+    {
+        this -> Head = newPtr;
+        return;
+    }
+    while(temp -> next)
+    {
+        temp = temp -> next;
+    }
+    temp -> next = newPtr;
+    return;
+
+}
+
+void transactions::display()
+{
+    node *temp = this -> Head;
+    while(temp)
+    {
+        cout << temp -> id << endl;
+        temp = temp -> next;
+    }
+    return;
+}
+
+void transactions::deleteNode(int id)
+{
+    node *curr = this -> Head, *prev = NULL;
+    while(curr && curr -> id != id)
+    {
+        prev = curr;
+        curr = curr -> next;
+    }
+    if(!curr)
+    {
+        cout << "Cannot Delete.\n";
+        return;
+    }
+    if(curr == this -> Head)
+    {
+        this -> Head = this -> Head-> next;
+    }
+    else
+        prev -> next = curr -> next;
+    delete curr;
+
+}
+
+
 class user{
   private:
     user* left;
     user* right;
+    transactions transaction;
     int data; // This is the id
     string password;
     string name;
@@ -256,210 +348,6 @@ void user::max(user* root){
 }
 
 int user::height(user* root ){
-  // base case
-  if (root == NULL) {
-    return -1;
-  }
-  else{
-  int ldepth = height(root -> left);
-  int rdepth = height(root -> right);
-
-  if (ldepth > rdepth) {
-    return (ldepth + 1);
-  } else return (rdepth + 1);
-}
-}
-
-class transactions{
-    private:
-       struct node{
-           int val;
-           node *next;
-       };
-         node *Head;
-    public:
-        transactions();
-        void insert(int);
-        void display();
-        void search(int);
-        void deleteNode(int);
-          ~transactions()
-          {
-              node *temp;
-              while(temp)
-              {
-                  temp = this->Head;
-                  this->Head = this->Head->next;
-                  delete temp;
-              }
-          }
-};
-
-
-transactions::transactions()
-{
-    this->Head = NULL;
-}
-
-void transactions::insert(int val)
-{
-    node *newPtr = new node(), *temp = this->Head;
-    newPtr->val = val;
-    newPtr->next = NULL;
-    if(!this->Head)
-    {
-        this->Head = newPtr;
-        return;
-    }
-    while(temp->next)
-    {
-        temp = temp->next;
-    }
-    temp->next = newPtr;
-    return;
-
-}
-
-void transactions::display()
-{
-    node *temp = this->Head;
-    while(temp)
-    {
-        cout << temp->val << endl;
-        temp = temp->next;
-    }
-    return;
-}
-
-void transactions::deleteNode(int val)
-{
-    node *curr = this->Head, *prev = NULL;
-    while(curr && curr->val != val)
-    {
-        prev = curr;
-        curr = curr->next;
-    }
-    if(!curr)
-    {
-        cout << "Cannot Delete.\n";
-        return;
-    }
-    if(curr == this->Head)
-    {
-        this->Head = this->Head->next;
-    }
-    else
-        prev->next = curr->next;
-    delete curr;
-
-}
-
-class bst{
-  private:
-    bst* left;
-    bst* right;
-    int data;
-
-  public:
-    bst* insert(int, bst*);
-    void search(int, bst*);
-    void display(bst*);
-    bst* min(bst*);
-    void max(bst*);
-    int height(bst*);
-    bst* remove(bst*, int);
-};
-
-bst* bst::remove(bst* root, int data){
-  // base case
-  if (root == NULL) {
-    cout << "DATA NOT FOUND." <<endl;
-    return root;
-  } else if (data > root -> data) {
-    root -> right = remove(root -> right, data);
-  } else if(data < root -> data){
-    root -> left = remove(root -> left, data);
-  } else{
-    // three cases
-    // Case 1: No child
-    if(root -> left == NULL && root -> right == NULL){
-      delete root;
-      root = NULL;
-    }
-
-    // Case 2: One child
-    else if(root -> left == NULL){
-      bst* temp = root;
-      root = root -> right;
-      delete temp;
-
-    } else if(root -> right == NULL){
-      bst* temp = root;
-      root = root -> left;
-      delete temp;
-    } else { // Case 3: Two children
-      bst* temp = min(root -> right);
-      root -> data = temp -> data;
-      root -> right = remove(root -> right, temp -> data);
-    }
-
-  }
-  return root;
-}
-
-bst* bst::insert(int data, bst* root){
-  if ( root == NULL) {
-    bst* temp = new bst();
-    temp -> data = data;
-    temp -> left = NULL;
-    temp -> right = NULL;
-    return temp;
-  } else if( data < root -> data){
-    root -> left = insert(data, root-> left);
-  } else{
-    root -> right = insert(data, root -> right);
-  }
-}
-
-void bst::search(int data, bst* root){
-  if (root  == NULL) {
-    cout<< "DATA NOT FOUND! "<<endl;
-    return;
-  } else if( root -> data == data){
-    cout<<" DATA FOUND"<<endl;
-    return;
-  }
-   else if( data > root -> data){
-    search(data, root -> right);
-  } else if (data < root -> data){
-    search(data, root -> left);
-  }
-
-}
-
-void bst::display(bst* root){
-  if ( root == NULL) return;
-  display( root -> left);
-  cout << root -> data << "\t";
-  display(root -> right);
-}
-
-bst* bst::min(bst* root){
-  while( root -> left != NULL){
-    root = root -> left;
-  }
-  return root;
-}
-
-void bst::max(bst* root){
-  while( root -> right != NULL){
-    root = root -> right;
-  }
-  cout<< endl;
-  cout<< "The max is: "<< root -> data;
-}
-
-int bst::height(bst* root ){
   // base case
   if (root == NULL) {
     return -1;

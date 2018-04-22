@@ -9,12 +9,13 @@ class transactions{
            int from;
            int to;
            float amount;
+           string typeTrans;
            node *next;
        };
          node *Head;
     public:
         transactions();
-        void insert(int, int, int, float);
+        void insert(int, int, int, float, string);
         void display();
         void search(int);
         void deleteNode(int);
@@ -36,13 +37,14 @@ transactions::transactions()
     this -> Head = NULL;
 }
 
-void transactions::insert(int id, int from, int to, float amount)
+void transactions::insert(int id, int from, int to, float amount, string typeTrans)
 {
     node *newPtr = new node(), *temp = this -> Head;
     newPtr -> id = id;
     newPtr -> from = from;
     newPtr -> to = to;
     newPtr -> amount = amount;
+    newPtr -> typeTrans = typeTrans;
     newPtr -> next = NULL;
     if(!this -> Head)
     {
@@ -63,7 +65,7 @@ void transactions::display()
     node *temp = this -> Head;
     while(temp)
     {
-        cout << temp -> id << endl;
+        cout << temp -> id << '\t' << temp -> from << '\t'<< temp -> to << '\t'<< temp -> amount << '\t' << temp -> typeTrans <<endl;
         temp = temp -> next;
     }
     return;
@@ -126,27 +128,20 @@ class user{
     void showBal(int, user*);
     void withdraw(int, float, user*);
     void transfer(int, int, float, user*);
+    void transactions(int, int, int, float, string);
+    void printTrans(int id, user*);
 
 };
 
-void user::transfer(int from, int to, float amount, user* root){
-  user* from_u = search(from, root);
-  user* to_u = search(to, root);
-  if (from_u && to_u) {
-    if (from_u -> getAmount() >= amount) {
-      from_u -> setAmount(from_u -> getAmount() - amount);
-      to_u -> depositAmount(amount);
-    } else cout << "Amount is insufficient. " <<endl;
-
-  } else cout <<"Either user id is incorrent or user doesn't exist. " <<endl;
-}
-
-void user::withdraw(int id, float amount, user* root){
+void user::printTrans(int id, user* root){
   user* user_find = search(id, root);
-  if (amount <= user_find -> getAmount() && user_find) {
-    user_find -> setAmount(user_find -> getAmount() - amount);
-  } else cout << "Amount is greater than available balance or user id incorrect. " << endl;
+  user_find -> transaction.display();
 }
+
+void user::transactions(int id, int from, int to, float amount, string typeTrans){
+  transaction.insert(id, from, to, amount, typeTrans);
+}
+
 
 void user::showBal(int id, user* root){
   user* user_find = search(id, root);

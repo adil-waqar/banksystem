@@ -20,6 +20,8 @@ class manager{
   void applyInterest(int, user*);
   void applyZakat(user*);
   void test(user*);
+  void write(user*, ofstream&);
+  user* read(user*, ifstream&);
 
 };
 
@@ -63,6 +65,11 @@ void manager::test(user* root){
   users.display(root);
 }
 
+// void manager::write(user* root, ofstream &outFile){
+//   if (root == NULL) return;
+//   // write(root -> left, outFile);
+// }
+
 void user::withdraw(int id, float amount, user* root){
   user* user_find = search(id, root);
   if (amount <= user_find -> getAmount() && user_find) {
@@ -87,15 +94,7 @@ void user::transfer(int from, int to, float amount, user* root){
   } else cout <<"Either user id is incorrent or user doesn't exist. " <<endl;
 }
 
-
-int main(){
-  ifstream inFile;
-  inFile.open("data/users.txt");
-  manager boy(0, "123", 500);
-  user girl;
-  user* root = NULL;
-  // root = boy.openAccount(2, "allowaccess", "Adil", 500, 00.0, "Sav", root);
-  // root = boy.openAccount(3, "accessgranted", "Emily", 750, 00.0, "Sav", root);
+user* manager::read(user* root, ifstream &inFile){
   int id;
   string password;
   string name;
@@ -103,15 +102,49 @@ int main(){
   float interest;
   string type;
   while (inFile >> id >> password >> name >> amount >> interest >> type ) {
-    root = boy.openAccount(id, password, name, amount, interest, type, root);
+    root = openAccount(id, password, name, amount, interest, type, root);
   }
+  return root;
+}
 
-//  boy.test(root);
-  boy.depositAmount(3, 60, root);
-  girl.withdraw(3, 80, root);
-  girl.transfer(3, 2, 50, root);
-  cout << "User 3 transactions: " <<endl;
-  girl.printTrans(3, root);
-  cout << "User 2 transactions: " <<endl;
-  girl.printTrans(2, root);
+
+int main(){
+  // manager declarations
+  manager boy(0, "123", 500);
+
+  // Reading data from file
+
+  ifstream inFile;
+  inFile.open("data/users.txt");
+  user* root = NULL; // User tree declarations
+  root = boy.read(root, inFile);
+  inFile.close();
+  // End of reading
+  // Manager changing stuff
+  boy.setInterest(1, 11.00, root);
+  boy.setInterest(2, 10.00, root);
+  boy.applyInterest(2, root);
+  boy.applyInterest(2, root);
+  boy.applyInterest(1, root);
+  boy.applyZakat(root);
+
+  // Writing to file
+  ofstream outFile("data/users.txt");
+  user girl;
+  girl.writeUsers(root, outFile);
+  outFile.close();
+
+  //  boy.test(root);
+  // boy.depositAmount(3, 60, root);
+  // girl.withdraw(3, 80, root);
+  // girl.transfer(3, 2, 50, root);
+  // cout << "User 3 transactions: " <<endl;
+  //
+  // girl.sortTransByAmount(3, root);
+  // cout << "Sorted by Amount: " <<endl;
+  // girl.printTrans(3, root);
+  // cout << endl;
+  // girl.sortTransById(3, root);
+  // cout << "Sorted by ID: " <<endl;
+  // girl.printTrans(3, root);
 }

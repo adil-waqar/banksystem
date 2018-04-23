@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 #include<string>
 using namespace std;
 
@@ -23,9 +24,12 @@ class transactions{
         void search(int);
         void deleteNode(int);
         // sorting functions
-        void merge(transactions,node*,node*,node*); //
-    		void mergeSort(transactions, node*,node*); //sort
-    		void sort(transactions n); //
+        void mergeById(transactions,node*,node*,node*); //
+    		void mergeSortById(transactions, node*,node*); //sort
+    		void sortById(transactions n); //
+        void mergeByAmount(transactions,node*,node*,node*); //
+    		void mergeSortByAmount(transactions, node*,node*); //sort
+    		void sortByAmount(transactions n); //
     		node* findMiddle(node *start, node *end); // copy
           // ~transactions()
           // {
@@ -57,7 +61,7 @@ node* transactions::findMiddle(node *start, node *end)
 	}
 	return temp2;
 }
-void transactions::merge(transactions n, node *left, node *mid, node *right)
+void transactions::mergeById(transactions n, node *left, node *mid, node *right)
 {
      transactions temp1,temp2;
      temp1.Head = left;
@@ -104,19 +108,81 @@ void transactions::merge(transactions n, node *left, node *mid, node *right)
 	 	y = y->next;
 	 }
 }
-void transactions::mergeSort(transactions n, node *left, node *right)
+void transactions::mergeSortById(transactions n, node *left, node *right)
 {
 	if(left != right)
 	{
 		node *mid = this->findMiddle(left, right);
-		this->mergeSort(n, left, mid);
-		this->mergeSort(n, mid->next, right);
-		this->merge(n, left, mid,right);
+		this->mergeSortById(n, left, mid);
+		this->mergeSortById(n, mid->next, right);
+		this->mergeById(n, left, mid,right);
 	}
 }
-void transactions::sort(transactions n)
+void transactions::sortById(transactions n)
 {
-	this->mergeSort(n,this->Head, this->Tail);
+	this->mergeSortById(n,this->Head, this->Tail);
+}
+
+void transactions::mergeByAmount(transactions n, node *left, node *mid, node *right)
+{
+     transactions temp1,temp2;
+     temp1.Head = left;
+     temp1.Tail = mid;
+     temp2.Head = mid->next;
+     temp2.Tail = right;
+
+     node *i = left;
+     node *j = mid->next;
+     transactions temp;
+     while(i != temp1.Tail->next && j != temp2.Tail->next)
+     {
+     	if(i->amount < j->amount)
+     	{
+     		temp.insert(i->id, i -> from, i -> to, i -> amount, i -> typeTrans);
+     		i = i->next;
+		 }
+		 else
+		 {
+		 	temp.insert(j->id, j -> from, j -> to, j -> amount, j -> typeTrans);
+		 	j = j->next;
+		 }
+	 }
+
+	 while(i != temp1.Tail->next)
+	 {
+	 	temp.insert(i->id, i -> from, i -> to, i -> amount, i -> typeTrans);
+	 	i = i->next;
+	 }
+	 while(j != temp2.Tail->next)
+	 {
+	 	temp.insert(j->id, j -> from, j -> to, j -> amount, j -> typeTrans);
+	 	j = j->next;
+	 }
+
+	 node *y = temp.Head;
+	 for(node *x = left; x != right->next; x = x->next)
+	 {
+	 	x->id = y->id; // Changes
+    x -> from = y -> from;
+    x -> to = y -> to;
+    x -> amount = y -> amount;
+    x -> typeTrans = y -> typeTrans;
+	 	y = y->next;
+	 }
+}
+void transactions::mergeSortByAmount(transactions n, node *left, node *right)
+{
+	if(left != right)
+	{
+		node *mid = this->findMiddle(left, right);
+		this->mergeSortByAmount(n, left, mid);
+		this->mergeSortByAmount(n, mid->next, right);
+		this->mergeByAmount(n, left, mid,right);
+	}
+}
+void transactions::sortByAmount(transactions n)
+{
+	this->mergeSortByAmount(n,this->Head, this->Tail);
 }
 
 void transactions::insert(int id, int from, int to, float amount, string typeTrans)
@@ -211,8 +277,29 @@ class user{
     void transfer(int, int, float, user*);
     void transactions(int, int, int, float, string);
     void printTrans(int id, user*);
+    void sortTransById(int id, user*);
+    void sortTransByAmount(int id, user*);
+    void writeUsers(user*, ofstream&);
 
 };
+
+void user::writeUsers(user* root, ofstream &outFile){
+  if (root == NULL) return;
+  writeUsers(root -> left, outFile);
+  outFile << root -> data <<" " << root -> password << " " << root -> name << " " << root -> amount << " " << root -> interest << " " << root -> type << endl;
+  writeUsers(root -> right, outFile);
+}
+
+void user::sortTransByAmount(int id, user* root){
+  user* user_find = search(id, root);
+  user_find -> transaction.sortByAmount(transaction);
+}
+
+void user::sortTransById(int id, user* root){
+  user* user_find = search(id, root);
+  user_find -> transaction.sortById(transaction);
+}
+
 
 void user::printTrans(int id, user* root){
   user* user_find = search(id, root);
@@ -403,7 +490,7 @@ user* user::search(int data, user* root){
 void user::display(user* root){
   if ( root == NULL) return;
   display( root -> left);
-  cout << root -> password << "\t"<<height(root) <<endl;
+  cout << root -> data  <<'\t' <<root -> password<< '\t' << root -> name << '\t' <<root -> amount << '\t' <<root -> interest << '\t' <<root -> type << endl;
   display(root -> right);
 }
 

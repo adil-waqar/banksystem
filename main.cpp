@@ -3,7 +3,7 @@
 #include<fstream>
 #include<string>
 using namespace std;
-int transId = 1;
+int transId = 500;
 #include "E:\CS221\_inc\datastructs.h" // Add your own path here
 
 class manager{
@@ -106,12 +106,12 @@ int main(){
     root = boy.openAccount(id, password, name, amount, interest, type, root);
   }
 
-  girl.display(root);
-  // boy.depositAmount(3, 60, root);
-  // girl.withdraw(3, 80, root);
-  // girl.transfer(3, 2, 50, root);
-  // cout << "User 3 transactions: " <<endl;
-  // girl.printTrans(3, root);
-  // cout << "User 2 transactions: " <<endl;
-  // girl.printTrans(2, root);
+//  boy.test(root);
+  boy.depositAmount(3, 60, root);
+  girl.withdraw(3, 80, root);
+  girl.transfer(3, 2, 50, root);
+  cout << "User 3 transactions: " <<endl;
+  girl.printTrans(3, root);
+  cout << "User 2 transactions: " <<endl;
+  girl.printTrans(2, root);
 }

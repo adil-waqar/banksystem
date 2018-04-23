@@ -2,61 +2,141 @@
 #include<string>
 using namespace std;
 
+struct node{
+    int id;
+    int from;
+    int to;
+    float amount;
+    string typeTrans;
+    node *next;
+};
+
 class transactions{
     private:
-       struct node{
-           int id;
-           int from;
-           int to;
-           float amount;
-           string typeTrans;
-           node *next;
-       };
+
          node *Head;
+         node *Tail;
     public:
         transactions();
         void insert(int, int, int, float, string);
         void display();
         void search(int);
         void deleteNode(int);
-          ~transactions()
-          {
-              node *temp;
-              while(temp)
-              {
-                  temp = this -> Head;
-                  this -> Head = this -> Head ->next;
-                  delete temp;
-              }
-          }
+        // sorting functions
+        void merge(transactions,node*,node*,node*); //
+    		void mergeSort(transactions, node*,node*); //sort
+    		void sort(transactions n); //
+    		node* findMiddle(node *start, node *end); // copy
+          // ~transactions()
+          // {
+          //     node *temp;
+          //     while(temp)
+          //     {
+          //         temp = this -> Head;
+          //         this -> Head = this -> Head ->next;
+          //         delete temp;
+          //     }
+          // }
 };
 
 
 transactions::transactions()
 {
     this -> Head = NULL;
+    this -> Tail = NULL;
+}
+
+// Sorting
+node* transactions::findMiddle(node *start, node *end)
+{
+	node *temp1 = start, *temp2 = start;
+    while(temp1 != end && temp1->next != end && temp1->next != NULL)
+    {
+    	temp1 = temp1->next->next;
+    	temp2 = temp2->next;
+	}
+	return temp2;
+}
+void transactions::merge(transactions n, node *left, node *mid, node *right)
+{
+     transactions temp1,temp2;
+     temp1.Head = left;
+     temp1.Tail = mid;
+     temp2.Head = mid->next;
+     temp2.Tail = right;
+
+     node *i = left;
+     node *j = mid->next;
+     transactions temp;
+     while(i != temp1.Tail->next && j != temp2.Tail->next)
+     {
+     	if(i->id < j->id)
+     	{
+     		temp.insert(i->id, i -> from, i -> to, i -> amount, i -> typeTrans);
+     		i = i->next;
+		 }
+		 else
+		 {
+		 	temp.insert(j->id, j -> from, j -> to, j -> amount, j -> typeTrans);
+		 	j = j->next;
+		 }
+	 }
+
+	 while(i != temp1.Tail->next)
+	 {
+	 	temp.insert(i->id, i -> from, i -> to, i -> amount, i -> typeTrans);
+	 	i = i->next;
+	 }
+	 while(j != temp2.Tail->next)
+	 {
+	 	temp.insert(j->id, j -> from, j -> to, j -> amount, j -> typeTrans);
+	 	j = j->next;
+	 }
+
+	 node *y = temp.Head;
+	 for(node *x = left; x != right->next; x = x->next)
+	 {
+	 	x->id = y->id; // Changes
+    x -> from = y -> from;
+    x -> to = y -> to;
+    x -> amount = y -> amount;
+    x -> typeTrans = y -> typeTrans;
+	 	y = y->next;
+	 }
+}
+void transactions::mergeSort(transactions n, node *left, node *right)
+{
+	if(left != right)
+	{
+		node *mid = this->findMiddle(left, right);
+		this->mergeSort(n, left, mid);
+		this->mergeSort(n, mid->next, right);
+		this->merge(n, left, mid,right);
+	}
+}
+void transactions::sort(transactions n)
+{
+	this->mergeSort(n,this->Head, this->Tail);
 }
 
 void transactions::insert(int id, int from, int to, float amount, string typeTrans)
 {
-    node *newPtr = new node(), *temp = this -> Head;
-    newPtr -> id = id;
-    newPtr -> from = from;
-    newPtr -> to = to;
-    newPtr -> amount = amount;
-    newPtr -> typeTrans = typeTrans;
-    newPtr -> next = NULL;
-    if(!this -> Head)
-    {
-        this -> Head = newPtr;
-        return;
-    }
-    while(temp -> next)
-    {
-        temp = temp -> next;
-    }
-    temp -> next = newPtr;
-    return;
+	node *newPtr= new node();
+	newPtr->id = id;
+  newPtr->from = from;
+  newPtr->to = to;
+  newPtr -> amount = amount;
+  newPtr->typeTrans = typeTrans;
+
+	newPtr->next = NULL;
+	if(this->Head == NULL)
+	{
+		this->Head = this->Tail = newPtr;
+		return;
+	}
+	this->Tail->next = newPtr;
+	this->Tail = newPtr;
+	return;
 
 }
 
@@ -119,6 +199,7 @@ class user{
     user* left_rot(user*);
     user* lr_rot(user*);
     user* rl_rot(user*);
+    // Functions for user
     float getAmount();
     void setAmount(int);
     void setInterest(float);
@@ -259,7 +340,6 @@ user* user::remove(user* root, int data){
         {
 
                 // left left case
-                cout << "sfd";
                 if(height(root->right->right) - height(root->right->left) == 1)
                         return right_rot(root);
                 // left right case
